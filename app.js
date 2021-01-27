@@ -1,13 +1,15 @@
 require("dotenv").config();
 let express = require('express');
-const app = express();
-const sequelize = require("./db");
+let app = express();
+let sequelize = require('./db');
 
-let journal = require('./controllers/journalcontroller');
 let user = require('./controllers/usercontroller');
+let journal = require('./controllers/journalcontroller');
+
 
 sequelize.sync();
 // sequelize.sync({force: true});
+app.use(require('./middleware/headers'));
 
 app.use(express.json());
 
@@ -33,7 +35,7 @@ app.use('/user', user);
 /* ******************
   * Protected Route *
 *********************/
-app.use(require('./middleware/validate-session'));
+// app.use(require('./middleware/validate-session'));
 app.use('/journal', journal);
 
 app.listen(3000, function () {
